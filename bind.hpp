@@ -443,12 +443,9 @@ class bind_expression
     auto operator()(OtherArgs&&... args) const
       -> decltype(
            apply(
-             // XXX WAR nvcc 6.5 issue
              *std::declval<F*>(),
              substitute(
                forward_as_tuple(std::forward<OtherArgs>(args)...),
-               // XXX WAR nvcc 6.5 issue
-               //bound_args_
                *std::declval<tuple<BoundArgs...>*>()
              )
            )

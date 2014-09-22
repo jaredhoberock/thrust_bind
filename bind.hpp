@@ -443,6 +443,28 @@ class bind_expression
     auto operator()(OtherArgs&&... args) const
       -> decltype(
            apply(
+             *std::declval<const F*>(),
+             substitute(
+               forward_as_tuple(std::forward<OtherArgs>(args)...),
+               *std::declval<const tuple<BoundArgs...>*>()
+             )
+           )
+         )
+    {
+      return apply(
+        fun_,
+        substitute(
+          forward_as_tuple(std::forward<OtherArgs>(args)...),
+          bound_args_
+        )
+      );
+    }
+
+    template<class... OtherArgs>
+    __host__ __device__
+    auto operator()(OtherArgs&&... args)
+      -> decltype(
+           apply(
              *std::declval<F*>(),
              substitute(
                forward_as_tuple(std::forward<OtherArgs>(args)...),
